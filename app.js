@@ -1,14 +1,17 @@
-/*------------------------------- Starter Code -------------------------------*/
-
 const mongoose = require('mongoose');
 const prompt = require('prompt-sync')();
-const Customer = require('./models/customer');
-require('dotenv').config();
+const Customer = require('./models/customer'); // Ensure the path is correct
+const dotenv = require('dotenv');
 
- // Connect to MongoDB using the MONGODB_URI specified in our .env file.
+// Load environment variables from .env
+dotenv.config();
+
+// Debugging: Check if MONGODB_URI is loaded correctly
+console.log('MONGODB_URI:', process.env.MONGODB_URI);
+
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useNewUrlParser: true
 });
 
 const db = mongoose.connection;
@@ -17,7 +20,7 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-
+// Display the menu
 const displayMenu = () => {
     console.log(`
 Welcome to the CRM
@@ -32,6 +35,7 @@ What would you like to do?
     `);
 };
 
+// Create a customer
 const createCustomer = async () => {
     const name = prompt('What is the customer\'s name? ');
     const age = parseInt(prompt('What is the customer\'s age? '), 10);
@@ -40,6 +44,7 @@ const createCustomer = async () => {
     console.log('Customer created successfully!');
 };
 
+// View all customers
 const viewCustomers = async () => {
     const customers = await Customer.find();
     customers.forEach(customer => {
@@ -47,6 +52,7 @@ const viewCustomers = async () => {
     });
 };
 
+// Update a customer
 const updateCustomer = async () => {
     const customers = await Customer.find();
     customers.forEach(customer => {
@@ -59,6 +65,7 @@ const updateCustomer = async () => {
     console.log('Customer updated successfully!');
 };
 
+// Delete a customer
 const deleteCustomer = async () => {
     const customers = await Customer.find();
     customers.forEach(customer => {
@@ -69,6 +76,7 @@ const deleteCustomer = async () => {
     console.log('Customer deleted successfully!');
 };
 
+// Main function
 const main = async () => {
     let running = true;
     while (running) {
@@ -98,4 +106,5 @@ const main = async () => {
     console.log('Exiting...');
 };
 
+// Run the application
 main();
